@@ -1,7 +1,8 @@
+#!/home/grena/University/WP-Labs/Websockets/venv/bin/python
+
 import sys
 import socket
 from bs4 import BeautifulSoup
-
 
 def make_request(url):
     try:
@@ -14,43 +15,51 @@ def make_request(url):
 
         request = f"GET {path} HTTP/1.1\r\nHost: {host}\r\n\r\n"
 
-        with socket.create_connection((host, 80)) as sock:
-            sock.sendall(request.encode())
+        # Create a TCP socket
+        client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        client.connect((host, 80))
+        client.sendall(request.encode("utf-8"))
+        
 
-            response = b""
-            while True:
-                chunk = sock.recv(4096)
-                if not chunk:
-                    break
-                response += chunk
-                
-                if b"\r\n\r\n" in response:
-                    break
-                
-            return BeautifulSoup(response.decode("utf-8"), "html.parser").get_text()
-    except socket.error as e:
+        response = b""
+        while True:
+            chunk = client.recv(8192)
+            if not chunk:
+                break
+            response += chunk
+            if b'\r\n\r\n' in response:
+                break
+            
+        client.close()    
+
+        return BeautifulSoup(response, 'html.parser').get_text()
+    except client.error as e:
         print("Error making request:", e)
         sys.exit(1)
 
 def print_response(response):
-    header, _, body = response.partition("\r\n\r\n")
-    print(body)
+    print(response)  
 
 def search(search_term):
-    search_url = f"https://www.google.com/search?q={search_term}&num=10&hl=en&lr=lang_en"
-    print("Searching url: ", search_url)
+    search_url = f"https://www.google.com/search?q={search_term}"
     response = make_request(search_url)
-    print_response(response)
-
-def help():
-    print("Usage:")
-    print("go2web -u <URL>         # make an HTTP request to the specified URL and print the response")
-    print("go2web -s <search-term> # make an HTTP request to search the term using your favorite search engine and print top 10 results")
-    print("go2web -h               # show this help")
+    soup = BeautifulSoup(response, 'html.parser')
+    links = soup.find_all('a')
+    count = 0
+    for link in links:
+        href = link.get('href')
+        if href.startswith('/url?q='):
+            count += 1
+            print(link.get('href')[7:])
+            if count == 10:
+                break
 
 def main():
     if len(sys.argv) == 1 or sys.argv[1] == "-h":
-        help()
+        print("Usage:")
+        print("go2web -u <URL>         # make an HTTP request to the specified URL and print the response")
+        print("go2web -s <search-term> # make an HTTP request to search the term using your favorite search engine and print top 10 results")
+        print("go2web -h               # show this help")
         sys.exit(0)
     
     if sys.argv[1] == "-u":
