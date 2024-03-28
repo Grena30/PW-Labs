@@ -3,6 +3,13 @@
 import sys
 import socket
 from bs4 import BeautifulSoup
+import ssl
+import warnings
+
+PORT = 80
+RECV_SIZE = 4096
+
+warnings.filterwarnings('ignore', category=DeprecationWarning)
 
 def make_request(url):
     try:
@@ -13,47 +20,55 @@ def make_request(url):
         if not path:
             path = "/"
 
-        request = f"GET {path} HTTP/1.1\r\nHost: {host}\r\n\r\n"
-
-        # Create a TCP socket
         client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        client.connect((host, 80))
+        client.connect((host, PORT))
+        request = f"GET {path} HTTP/1.1\r\nHost:{host}\r\nConnection: close\r\n\r\n"
+
         client.sendall(request.encode("utf-8"))
         
-
         response = b""
         while True:
-            chunk = client.recv(8192)
+            chunk = client.recv(RECV_SIZE)
             if not chunk:
                 break
             response += chunk
-            if b'\r\n\r\n' in response:
-                break
             
         client.close()    
 
-        return BeautifulSoup(response, 'html.parser').get_text()
-    except client.error as e:
+        soup =  BeautifulSoup(response, 'html.parser')
+    
+        if soup.decode().startswith("HTTP/1.1 301") or soup.decode().startswith("HTTP/1.1 302") or soup.decode().startswith("HTTP/1.1 303") or soup.decode().startswith("HTTP/1.1 307") or soup.decode().startswith("HTTP/1.1 308"):
+
+            print("Redirecting...\n")
+            client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            ssl_socket = ssl.wrap_socket(client_socket, ssl_version=ssl.PROTOCOL_TLS)
+            ssl_socket.connect((host, 443))
+            ssl_socket.sendall(request.encode("utf-8"))
+
+            response = b''
+            while True:
+                data = ssl_socket.recv(1024)
+                if not data:
+                    break
+                response += data
+
+
+            ssl_socket.close()
+        
+        return response
+    
+    except socket.error as e:
         print("Error making request:", e)
         sys.exit(1)
 
-def print_response(response):
-    print(response)  
-
-def search(search_term):
-    search_url = f"https://www.google.com/search?q={search_term}"
-    response = make_request(search_url)
+def print_url_response(response):
     soup = BeautifulSoup(response, 'html.parser')
-    links = soup.find_all('a')
-    count = 0
-    for link in links:
-        href = link.get('href')
-        if href.startswith('/url?q='):
-            count += 1
-            print(link.get('href')[7:])
-            if count == 10:
-                break
+    print(soup.get_text())
 
+def print_search_results(response):
+    soup = BeautifulSoup(response, 'html.parser')
+    print(soup.get_text())
+    
 def main():
     if len(sys.argv) == 1 or sys.argv[1] == "-h":
         print("Usage:")
@@ -68,15 +83,17 @@ def main():
             sys.exit(1)
         url = sys.argv[2]
         response = make_request(url)
-        print_response(response)
+        print_url_response(response)
     
     elif sys.argv[1] == "-s":
         if len(sys.argv) != 3:
             print("Usage: go2web -s <search-term>")
             sys.exit(1)
         search_term = sys.argv[2]
-        search(search_term)
-    
+        search_term = search_term.replace(" ", "+")
+        results = make_request("https://www.google.com/search?q=" + search_term)
+        print_search_results(results)
+        
     else:
         print("Invalid option. Use -h for help.")
 
