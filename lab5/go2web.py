@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup
 import ssl
 import warnings
 import pickle
+import json
 
 PORT = 80
 RECV_SIZE = 4096
@@ -82,31 +83,53 @@ def make_request(url):
         sys.exit(1)
 
 def print_url_response(response):
-    soup = BeautifulSoup(response, 'html.parser')
-
-    print("\nHTTP Response:\n")
-    for line in soup.get_text().splitlines():
-        if (line.startswith("Transfer-Encoding:")):
-            print(line)
-            break
-        else:
-            print(line)
     
-    # Define tags to extract
-    tags = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'a', 'ul']
+    headers, body = response.split(b'\r\n\r\n', 1)
+    content_type = None
+    for header in headers.split(b'\r\n'):
+        if header.startswith(b'Content-Type:'):
+            content_type = header.split(b':', 1)[1].strip()
 
-    print("\nExtracted content: \n")
-    for tag in soup.find_all(tags):
-        if tag.name.startswith('h'):
-            print(tag.get_text().strip() + "\n")
-        elif tag.name == 'ul':
-            for li in tag.find_all('li'):
-                print(li.get_text().strip())
-        elif tag.name == 'a' and tag.get('href') and (tag.get('href').startswith('http://') or tag.get('href').startswith('https://')):
-            print(tag.get_text().strip())
-            print("Link:", tag.get('href'))
-        elif tag.name == 'p':
-            print(tag.get_text().strip())
+    if content_type and content_type.startswith(b'application/json'):
+        print("\nJSON Response Headers:\n")
+        print(headers.decode('utf-8'))
+
+        print("\nJSON Response Body:\n")
+        try:
+            json_obj = json.loads(body.decode('utf-8'))
+            print(json.dumps(json_obj, indent=4))
+        except json.JSONDecodeError as e:
+            print("Error decoding JSON response:", e)
+        
+    elif content_type and content_type.startswith(b'text/html'):      
+        soup = BeautifulSoup(response, 'html.parser')
+
+        print("\nHTTP Response:\n")
+        for line in soup.get_text().splitlines():
+            if (line.startswith("Transfer-Encoding:")):
+                print(line)
+                break
+            else:
+                print(line)
+        
+        # Define tags to extract
+        tags = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'a', 'ul']
+
+        print("\nExtracted content: \n")
+        for tag in soup.find_all(tags):
+            if tag.name.startswith('h'):
+                print(tag.get_text().strip() + "\n")
+            elif tag.name == 'ul':
+                for li in tag.find_all('li'):
+                    print(li.get_text().strip())
+            elif tag.name == 'a' and tag.get('href') and (tag.get('href').startswith('http://') or tag.get('href').startswith('https://')):
+                print(tag.get_text().strip())
+                print("Link:", tag.get('href'))
+            elif tag.name == 'p':
+                print(tag.get_text().strip())
+    else:
+        print("\nResponse not supported. Try another URL.\n")
+    print()
     
 def print_search_results(response):
     soup = BeautifulSoup(response, 'html.parser')
