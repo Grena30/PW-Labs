@@ -18,7 +18,6 @@ def make_request(url):
         elif url.startswith('https://'):
             url = url[len('https://'):]
 
-        # Split the URL into host and path parts
         parts = url.split('/', 1)
         host = parts[0]
         path = '/'
@@ -42,9 +41,10 @@ def make_request(url):
         client.close()    
 
         soup =  BeautifulSoup(response, 'html.parser')
-    
-        if soup.decode().startswith("HTTP/1.1 301") or soup.decode().startswith("HTTP/1.1 302") or soup.decode().startswith("HTTP/1.1 303") or soup.decode().startswith("HTTP/1.1 307") or soup.decode().startswith("HTTP/1.1 308"):
+        redirect_codes = ["HTTP/1.1 301", "HTTP/1.1 302", "HTTP/1.1 303", "HTTP/1.1 307", "HTTP/1.1 308"]
 
+        if any(soup.decode().startswith(code) for code in redirect_codes):
+            
             print("Redirecting...\n")
             client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             ssl_socket = ssl.wrap_socket(client_socket, ssl_version=ssl.PROTOCOL_TLS)
@@ -68,8 +68,31 @@ def make_request(url):
 
 def print_url_response(response):
     soup = BeautifulSoup(response, 'html.parser')
-    print(soup.get_text())
 
+    print("\nHTTP Response:\n")
+    for line in soup.get_text().splitlines():
+        if (line.startswith("Transfer-Encoding:")):
+            print(line)
+            break
+        else:
+            print(line)
+    
+    # Define tags to extract
+    tags = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'a', 'ul']
+
+    print("\nExtracted content: \n")
+    for tag in soup.find_all(tags):
+        if tag.name.startswith('h'):
+            print(tag.get_text().strip() + "\n")
+        elif tag.name == 'ul':
+            for li in tag.find_all('li'):
+                print(li.get_text().strip())
+        elif tag.name == 'a' and tag.get('href') and (tag.get('href').startswith('http://') or tag.get('href').startswith('https://')):
+            print(tag.get_text().strip())
+            print("Link:", tag.get('href'))
+        elif tag.name == 'p':
+            print(tag.get_text().strip())
+    
 def print_search_results(response):
     soup = BeautifulSoup(response, 'html.parser')
     results = soup.find_all('li', class_='b_algo')
@@ -88,7 +111,7 @@ def main():
         print("go2web -h               # show this help")
         sys.exit(0)
     
-    if sys.argv[1] == "-u":
+    if sys.argv[1] == "-u" and len(sys.argv) <= 3:
         if len(sys.argv) != 3:
             print("Usage: go2web -u <URL>")
             sys.exit(1)
@@ -96,7 +119,7 @@ def main():
         response = make_request(url)
         print_url_response(response)
     
-    elif sys.argv[1] == "-s":
+    elif sys.argv[1] == "-s" and len(sys.argv) <= 3:
         if len(sys.argv) != 3:
             print("Usage: go2web -s <search-term>")
             sys.exit(1)
@@ -104,7 +127,14 @@ def main():
         search_term = search_term.replace(" ", "+")
         results = make_request(f"https://www.bing.com/search?q={search_term}")
         print_search_results(results)
-        
+    
+    elif sys.argv[1] == "-u" and sys.argv[3] == "-s":
+        url = sys.argv[2]
+        search_term = sys.argv[4]
+        search_term = search_term.replace(" ", "+")
+        results = make_request((f"{url}/search?q={search_term}"))
+        print_url_response(results)
+    
     else:
         print("Invalid option. Use -h for help.")
 
