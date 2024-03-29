@@ -1,4 +1,4 @@
-#!/home/grena/University/WP-Labs/Websockets/venv/bin/python
+#!/home/grena/University/WP-Labs/PW-Labs/lab5/venv/bin/python
 
 import sys
 import socket
