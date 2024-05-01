@@ -18,14 +18,32 @@
   }
   
   .course-card {
-    width: calc(25% - 1rem); /* 25% width for each card with gap between */
+    width: calc(25% - 1rem);
     background-color: #fff;
-    padding: 1.5rem;
+    padding: 2rem;
+    padding-bottom: 0rem;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     text-align: center;
     position: relative;
     z-index: 1;
+  }
+
+  .course-card h3 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  .course-description {
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+    text-align: justify;
+  }
+
+  .course-level {
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+    font-weight: bold;
   }
 
   .course-card:hover {
@@ -40,6 +58,8 @@
     object-fit: cover;
     border-radius: 5px;
     margin-bottom: 1rem;
+    background-size: cover;
+    background-position: center;
   }
   
   .bookmark-icon {
@@ -47,4 +67,24 @@
     font-size: 1.5rem;
     color: gold;
     cursor: pointer;
+  }
+
+  .level-1 {
+    color: green;
+  }
+  
+  .level-2 {
+    color: blue;
+  }
+  
+  .level-3 {
+    color: red;
+  }
+  
+  .level-4 {
+    color: rgb(98, 17, 17);
+  }
+  
+  .level-5 {
+    color: rgb(10, 1, 1);
   }

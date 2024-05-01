@@ -3,6 +3,7 @@
 
   --primary-color: #4F6F52; 
   --primary-color-dark: #1A4D2E;
+  --primary-color-extra-dark: #0d2918;
   --primary-color-contrast: #E8DFCA;
   --secondary-color: #fff;
   --tertiary-color: #000;
@@ -24,6 +25,6 @@ html {
 
 
 .container {
-  width: 90vw;
+  width: 100%;
   margin: 0 auto;
 }
