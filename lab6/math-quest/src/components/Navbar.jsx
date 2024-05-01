@@ -12,9 +12,8 @@ const Navbar = () => {
       </a>
 
       <div className="navbar-links">
-        <a className="navbar-link" href="#get_started">Get started</a>
-        <a className="navbar-link" href="#lessons">Courses</a>
-        <a className="navbar-link" href="#about">About</a>
+        <a className="navbar-link" href="#home">Get started</a>
+        <a className="navbar-link" href="#courses">Courses</a>
         <button className="navbar-btn">
           <img className="navbar-icon" src={dark_theme} alt="dark_theme_icon" />
         </button>
