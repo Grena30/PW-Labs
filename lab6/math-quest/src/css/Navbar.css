@@ -9,6 +9,8 @@
 .navbar {
   justify-content: space-between;
   padding: 3rem 0;
+  width: 90vw;
+  margin: 0 auto;
 }
 
 .navbar-logo-wrapper {
