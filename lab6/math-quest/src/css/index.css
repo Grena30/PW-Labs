@@ -19,10 +19,11 @@
 
 html {
   font-size: 10px;
+  scroll-behavior: smooth;
 }
 
 
 .container {
-  width: 85vw;
+  width: 90vw;
   margin: 0 auto;
 }
