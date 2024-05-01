@@ -38,7 +38,7 @@ const coursesData = [
         description2: "Algebra is a branch of mathematics dealing with symbols and the rules for manipulating those symbols. In elementary algebra, those symbols (today written as Latin and Greek letters) represent quantities without fixed values, known as variables. Just as sentences describe relationships between specific words, in algebra, equations describe relationships between variables. Algebra's main goal is to solve for the unknown variable, which is usually denoted by a letter at the end of the alphabet, such as x, y, or z."
     },
     {
-        img: algebra_3,
+        img: vectors,
         alt: "Algebra 3",
         title: "Algebra 3",
         description: "Explore advanced algebra topics, including logarithms, functions, and conic sections.",
@@ -58,7 +58,7 @@ const coursesData = [
         alt: "Multivariable Calculus",
         title: "Multivariable Calculus",
         description: "Learn advanced calculus topics, including partial derivatives, multiple integrals, and vector calculus.",
-        level: 5,
+        level: 4,
         description2: "Calculus is a branch of mathematics that studies continuous change. It has two major branches: differential calculus and integral calculus. These two branches are related to each other by the fundamental theorem of calculus. Both branches make use of the fundamental notions of convergence of infinite sequences and infinite series to a well-defined limit."
     },
   ];
