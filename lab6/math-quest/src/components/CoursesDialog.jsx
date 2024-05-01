@@ -34,6 +34,9 @@ export default function CoursesDialog({ open, handleClose, course, handleFavouri
           open={open}
           onClose={handleClose}
           TransitionComponent={Transition}
+          PaperProps={{
+            style: { backgroundColor: 'var(--background-color)' },
+          }}
         >
           <Toolbar>
             <IconButton

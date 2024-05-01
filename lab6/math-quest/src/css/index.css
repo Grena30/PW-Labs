@@ -4,10 +4,36 @@
   --primary-color: #4F6F52; 
   --primary-color-dark: #1A4D2E;
   --primary-color-extra-dark: #0d2918;
+  --text-color: #000;
   --primary-color-contrast: #E8DFCA;
   --secondary-color: #fff;
   --tertiary-color: #000;
   --highlight-color: #153448;
+  --background-color: #f8f9fa;
+  --hover-border-color: #000000;
+  --card-color: #fff;
+  --home-background-image: url('../img/background2.jpg');
+  --level-1: #4CAF50;
+  --level-2: #844f09;
+  --level-3: #F44336;
+  --level-4: #620000;
+  --default-transition: all 0.3s ease;
+}
+
+.dark-theme {
+  --primary-color: #727985; 
+  --primary-color-dark: #8b96ad;
+  --text-color: #fff;
+  --hover-color: #D8DEE9; 
+  --background-color: #4C566A; 
+  --hover-border-color: #D8DEE9; 
+  --tertiary-color: #fff;
+  --card-color: #7c879c;
+  --home-background-image: url('../img/background2_dark_theme2.jpg');
+  --level-1: #8BC34A;
+  --level-2: #FFC107;
+  --level-3: #FF5722;
+  --level-4: #F44336;
 }
 
 *, *::before, *::after {
@@ -27,4 +53,8 @@ html {
 .container {
   width: 100%;
   margin: 0 auto;
+}
+
+body {
+  background-color: var(--background-color);
 }
