@@ -68,7 +68,7 @@ export default function CoursesDialog({ open, handleClose, course, handleFavouri
                 </button>
               </div>
               <div className="card">
-                <img src={course.img} alt={course.alt} />
+                <img src={course.img_dialog} alt={course.alt} />
               </div>
             </div>
           )}

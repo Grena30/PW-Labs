@@ -30,6 +30,13 @@
     z-index: 1;
   }
 
+  .star-icon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 10px;
+  }
+
   .course-card h3 {
     font-size: 2rem;
     margin-bottom: 1rem;
@@ -56,7 +63,7 @@
   .course-card img {
     width: 50%;
     max-height: 50%; 
-    object-fit: cover;
+    object-fit: contain;
     border-radius: 5px;
     margin-bottom: 1rem;
     background-size: cover;
