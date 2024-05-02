@@ -10,12 +10,12 @@
 
 .info {
   flex-grow: 1;
-  max-width: 70%; 
+  max-width: 65%; 
 }
 
 .card {
-  width: 215px;
-  height: 215px;
+  width: 500px;
+  height: 500px;
   border: 1px solid #ccc;
   border-radius: 5px;
   overflow: hidden;
