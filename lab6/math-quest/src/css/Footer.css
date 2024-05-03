@@ -1,0 +1,6 @@
+#footer {
+    background-color: var(--filter-favorite-color);
+    color: var(--secondary-color);
+    text-align: center;
+    padding: 2rem 0;
+}

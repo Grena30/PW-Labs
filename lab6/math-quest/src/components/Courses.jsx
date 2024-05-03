@@ -84,6 +84,11 @@ const Courses = () => {
   const [open, setOpen] = React.useState(false);
   const [selectedCourse, setSelectedCourse] = React.useState(null);
   const [favourites, setFavourites] = useState(JSON.parse(localStorage.getItem('favourites')) || []);
+  const [filter, setFilter] = useState('all');
+
+  const handleFilter = (newFilter) => {
+    setFilter(newFilter);
+  };
 
   useEffect(() => {
     localStorage.setItem('favourites', JSON.stringify(favourites));
@@ -110,22 +115,32 @@ const Courses = () => {
   };
 
   const sortedCourses = [...coursesData].sort((a, b) => favourites.includes(b.title) - favourites.includes(a.title));
+  const filteredCourses = filter === 'all' ? sortedCourses : sortedCourses.filter(course => favourites.includes(course.title));
 
   return (
     <section id="courses" className="section courses">
     <h2 className='courses-title'>Courses</h2>
+    <div className="courses-filter">
+      <button id="filter-all-btn" className={`filter-btn ${filter === 'all' ? 'active' : ''}`} onClick={() => handleFilter('all')}>All</button>
+      <button id="filter-favorite-btn" className={`filter-btn ${filter === 'favourites' ? 'active' : ''}`} onClick={() => handleFilter('favourites')}>Favorites</button>
+    </div>
+
     <div className="courses-container">
-      {sortedCourses.map((course, index) => (
-        <div key={index} className="course-card" onClick={() => handleClickOpen(course)}>
-          {favourites.includes(course.title) && <div className="star-icon"><StarIcon /></div>}
-          <img src={course.img} alt={course.alt} />
-          <h3>{course.title}</h3>
-          <p className='course-description'>{course.description}</p>
-          <div className={`course-level level-${course.level}`}>
-            Level: {course.level}
-          </div>
-        </div>
-      ))}
+       {filteredCourses.length > 0 ? (
+          filteredCourses.map((course, index) => (
+            <div key={index} className="course-card" onClick={() => handleClickOpen(course)}>
+              {favourites.includes(course.title) && <div className="star-icon"><StarIcon /></div>}
+              <img src={course.img} alt={course.alt} />
+              <h3>{course.title}</h3>
+              <p className='course-description'>{course.description}</p>
+              <div className={`course-level level-${course.level}`}>
+                Level: {course.level}
+              </div>
+            </div>
+          ))
+        ) : (
+          <p>No courses available</p>
+        )}
     </div>
     <CoursesDialog
         open={open}

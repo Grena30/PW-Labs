@@ -12,6 +12,8 @@
   --background-color: #f8f9fa;
   --hover-border-color: #000000;
   --card-color: #fff;
+  --filter-all-color: #8034ec; 
+  --filter-favorite-color: #4F6F52;
   --home-background-image: url('../img/background2.jpg');
   --level-1: #4CAF50;
   --level-2: #844f09;
@@ -21,14 +23,15 @@
 }
 
 .dark-theme {
-  --primary-color: #727985; 
-  --primary-color-dark: #8b96ad;
+  --primary-color: #5573b4; 
+  --primary-color-dark: #6880b3;
   --text-color: #fff;
   --hover-color: #D8DEE9; 
   --background-color: #4C566A; 
   --hover-border-color: #D8DEE9; 
   --tertiary-color: #fff;
   --card-color: #7c879c;
+  --filter-favorite-color: #5573b4;
   --home-background-image: url('../img/background2_dark_theme2.jpg');
   --level-1: #8BC34A;
   --level-2: #FFC107;
