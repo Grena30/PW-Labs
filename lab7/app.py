@@ -40,5 +40,5 @@ if __name__ == '__main__':
         }
     )
     app.register_blueprint(swagger_ui_blueprint, url_prefix=SWAGGER_URL)
-    #import routes
-    app.run()
+    import routes
+    app.run(port=6060, debug=True)

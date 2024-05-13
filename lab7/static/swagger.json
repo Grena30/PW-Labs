@@ -148,16 +148,32 @@
     },
     "/api/courses": {
       "get": {
-        "description": "Returns the list of all scooters",
+        "description": "Returns the list of all courses with pagination support",
         "consumes": [
           "application/json"
         ],
         "produces": [
           "application/json"
         ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number (default: 1)",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "description": "Number of courses per page (default: 10)",
+            "required": false,
+            "type": "integer"
+          }
+        ],
         "responses": {
           "200": {
-            "description": "List of scooters"
+            "description": "List of courses with pagination metadata"
           },
           "400": {
             "description": "Invalid request data"

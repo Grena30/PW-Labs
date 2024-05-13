@@ -6,6 +6,8 @@ from flask import request, jsonify
 from app import authenticate
 from flask_jwt_extended import jwt_required, get_jwt_identity, create_access_token
 
+DEFAULT_PAGE = 1
+DEFAULT_PER_PAGE = 4
 
 def admin_required(fn):
     def wrapper(*args, **kwargs):
@@ -56,7 +58,16 @@ def create_courses():
 
 @app.route('/api/courses', methods=['GET'])
 def get_courses():
-    courses = Courses.query.all()
+    # Pagination parameters
+    page = request.args.get('page', DEFAULT_PAGE, type=int)
+    per_page = request.args.get('per_page', DEFAULT_PER_PAGE, type=int)
+
+    # Paginate the query
+    courses_pagination = Courses.query.paginate(page=page, per_page=per_page, error_out=False)
+
+    courses = courses_pagination.items
+    total_courses = courses_pagination.total
+
     courses_list = []
     for course in courses:
         courses_list.append({
@@ -66,7 +77,15 @@ def get_courses():
             "description2": course.description2,
             "description3": course.description3
         })
-    return jsonify(courses_list), 200
+
+    response = {
+        "courses": courses_list,
+        "total_courses": total_courses,
+        "current_page": page,
+        "per_page": per_page
+    }
+
+    return jsonify(response), 200
 
 
 @app.route('/api/courses/<int:course_id>', methods=['GET'])
