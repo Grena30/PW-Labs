@@ -7,7 +7,7 @@ import Footer from "./components/Footer";
 function App() {
   const [token, setToken] = useState(() => {
     const token = JSON.parse(localStorage.getItem("token"));
-    return token ? token.token : null;
+    return token ? token.Bearer : null;
   });
 
   const fetchToken = (role) => {
