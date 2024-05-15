@@ -35,6 +35,8 @@ export default function CoursesDialog({
         level: course.level,
         description2: course.description2,
         description3: course.description3,
+        img: course.img,
+        img_dialog: course.img_dialog,
       };
 
       if (token) {
@@ -60,6 +62,8 @@ export default function CoursesDialog({
         level: course.level,
         description2: course.description2,
         description3: course.description3,
+        img: course.img,
+        img_dialog: course.img_dialog,
       }),
     })
       .then((response) => {
@@ -88,13 +92,22 @@ export default function CoursesDialog({
     })
       .then((response) => {
         if (response.status === 401) {
-          alert("Your token has expired.");
-          return;
+          return response.json().then((data) => {
+            if (data.error === "Admin access required") {
+              alert("You are not authorized to do this action.");
+              return;
+            } else if (data.error === "Token has expired") {
+              alert("Your token has expired.");
+              return;
+            } else {
+              alert("Unauthorized access.");
+              return;
+            }
+          });
         }
         return response.json();
       })
       .then((data) => {
-        console.log(token);
         console.log("Success:", data);
         if (data.msg === "Not enough segments") {
           alert("You are not authorized to delete this course.");
