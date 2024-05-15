@@ -62,9 +62,17 @@ export default function CoursesDialog({
         description3: course.description3,
       }),
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (response.status === 401) {
+          alert("Your token has expired.");
+          return;
+        }
+        return response.json();
+      })
       .then((data) => {
-        console.log("Success:", data);
+        if (data) {
+          console.log("Success:", data);
+        }
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -78,7 +86,13 @@ export default function CoursesDialog({
         Authorization: `Bearer ${token}`,
       },
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (response.status === 401) {
+          alert("Your token has expired.");
+          return;
+        }
+        return response.json();
+      })
       .then((data) => {
         console.log(token);
         console.log("Success:", data);
