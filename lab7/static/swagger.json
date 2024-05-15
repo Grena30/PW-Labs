@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "Access API",
+    "title": "Courses API",
     "version": "1.0.0"
   },
   "securityDefinitions": {
