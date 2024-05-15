@@ -6,6 +6,7 @@ from flask import request, jsonify
 from app import authenticate
 from flask_jwt_extended import jwt_required, get_jwt_identity, create_access_token
 
+
 DEFAULT_PAGE = 1
 DEFAULT_PER_PAGE = 4
 
@@ -42,10 +43,12 @@ def create_courses():
         level = data['level']
         description2 = data['description2']
         description3 = data['description3']
+        img = data['img']
+        img_dialog = data['img_dialog']
         
         token = request.headers.get('Authorization').split(' ')[1]
 
-        courses = Courses(title, description, level, description2, description3)
+        courses = Courses(title, description, level, description2, description3, img, img_dialog)
 
         db.session.add(courses)
         db.session.commit()
@@ -76,7 +79,9 @@ def get_courses():
             "description": course.description,
             "level": course.level,
             "description2": course.description2,
-            "description3": course.description3
+            "description3": course.description3,
+            "img": course.img,
+            "img_dialog": course.img_dialog
         })
 
     response = {
@@ -98,7 +103,9 @@ def get_courses_by_id(course_id):
             "description": course.description,
             "level": course.level,
             "description2": course.description2,
-            "description3": course.description3
+            "description3": course.description3,
+            "img": course.img,
+            "img_dialog": course.img_dialog
         }), 200
     else:
         return jsonify({"error": "Course not found"}), 404
@@ -119,6 +126,8 @@ def update_courses(course_id):
             course.level = data.get('level', course.level)
             course.description2 = data.get('description2', course.description2)
             course.description3 = data.get('description3', course.description3)
+            course.img = data.get('img', course.img)
+            course.img_dialog = data.get('img_dialog', course.img_dialog)
             db.session.commit()
 
             return jsonify({"message": "Course updated successfully"}), 200

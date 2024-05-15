@@ -233,6 +233,12 @@
         },
         "description3": {
           "type": "string"
+        },
+        "img": {
+          "type": "string"
+        },
+        "img_dialog": {
+          "type": "string"
         }
       }
     },
