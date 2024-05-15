@@ -1,43 +1,42 @@
 .home {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    text-align: center;
-    background: var(--home-background-image) no-repeat center center/cover;
-    color: var(--text-color);
-     
-  }
-  
-  .home-content {
-    max-width: 800px;
-    padding: 2rem;
-
-  }
-
-  .home-title {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  text-align: center;
+  background: var(--home-background-image) no-repeat center center/cover;
+  color: var(--text-color);
+   
 }
 
-  .home-text {
-    margin-bottom: 1rem;
-    font-size: 1.6rem;
-  }
-  
-  .home-btn {
-    display: inline-block;
-    margin-top: 2rem;
-    padding: 1rem 2rem;
-    font-size: 1.6rem;
-    text-decoration: none;
-    color: white;
-    background-color: var(--primary-color);
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-  }
-  
-  .home-btn:hover {
-    background-color: var(--primary-color-dark);
-  }
-  
+.home-content {
+  max-width: 800px;
+  padding: 2rem;
+
+}
+
+.home-title {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.home-text {
+  margin-bottom: 1rem;
+  font-size: 1.6rem;
+}
+
+.home-btn {
+  display: inline-block;
+  margin-top: 2rem;
+  padding: 1rem 2rem;
+  font-size: 1.6rem;
+  text-decoration: none;
+  color: white;
+  background-color: var(--primary-color);
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.home-btn:hover {
+  background-color: var(--primary-color-dark);
+}

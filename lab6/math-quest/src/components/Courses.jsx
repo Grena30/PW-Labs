@@ -80,22 +80,44 @@ const coursesData = [
 ];
 
 
-const Courses = () => {
+const Courses = ({ token }) => {
   const [open, setOpen] = React.useState(false);
-  const [selectedCourse, setSelectedCourse] = React.useState(null);
-  const [favourites, setFavourites] = useState(JSON.parse(localStorage.getItem('favourites')) || []);
+  const [selectedCourse, setSelectedCourse] = React.useState({});
+  const [favourites, setFavourites] = useState([]);
   const [filter, setFilter] = useState('all');
 
   const handleFilter = (newFilter) => {
     setFilter(newFilter);
   };
 
+  const getAllCourses = () => {
+    fetch("http://127.0.0.1:6060/api/courses", {
+      method: "GET",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setFavourites(data.courses);
+      })
+      .catch((error) => console.error("Error:", error));
+  };
+
   useEffect(() => {
-    localStorage.setItem('favourites', JSON.stringify(favourites));
-  }, [favourites]);
+    getAllCourses();
+  }, []);
 
   const handleClickOpen = (course) => {
-    setSelectedCourse(course);
+    if (filter === 'favourites') {
+      let newCourse = { ...course, 
+        favourite: true
+       };
+      setSelectedCourse(newCourse);
+    } else {
+      let newCourse = { ...course,
+        favourite: false
+      };
+      setSelectedCourse(newCourse);
+    }
+
     setOpen(true);
   };
 
@@ -103,19 +125,8 @@ const Courses = () => {
     setOpen(false);
   };
 
-  const handleFavourite = (course) => {
-    let favouritesFromStorage = JSON.parse(localStorage.getItem('favourites')) || [];
-    if (favouritesFromStorage.includes(course.title)) {
-      favouritesFromStorage = favouritesFromStorage.filter(title => title !== course.title);
-    } else {
-      favouritesFromStorage.push(course.title);
-    }
-    localStorage.setItem('favourites', JSON.stringify(favouritesFromStorage));
-    setFavourites(favouritesFromStorage);
-  };
-
   const sortedCourses = [...coursesData].sort((a, b) => favourites.includes(b.title) - favourites.includes(a.title));
-  const filteredCourses = filter === 'all' ? sortedCourses : sortedCourses.filter(course => favourites.includes(course.title));
+  const filteredCourses = filter === 'all' ? sortedCourses : favourites;
 
   return (
     <section id="courses" className="section courses">
@@ -146,11 +157,13 @@ const Courses = () => {
         open={open}
         handleClose={handleClose}
         course={selectedCourse}
-        handleFavourite={handleFavourite}
+        filter={filter}
+        token={token}
+        favourites={favourites}
+        setFavourites={setFavourites}
+        getAllCourses={getAllCourses}
     />
     </section>
-
-
   );
 }
 

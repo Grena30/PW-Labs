@@ -3,7 +3,7 @@ import '../css/Navbar.css';
 import main_icon from '../img/main_page_icon.png';
 import dark_theme from '../img/dark_theme_icon.png';
 
-const Navbar = () => {
+const Navbar = ({ fetchToken }) => { 
   const [isDarkTheme, setIsDarkTheme] = useState(() => {
     const savedTheme = localStorage.getItem('darkTheme');
     return savedTheme === 'true' ? true : false;
@@ -19,6 +19,7 @@ const Navbar = () => {
     setIsDarkTheme(prevTheme => !prevTheme);
   };
 
+    
   return (
     <nav id="navbar" className={`navbar ${isDarkTheme ? 'dark-theme' : ''}`}>
       <a className="navbar-logo-wrapper" href="#header">
@@ -27,6 +28,8 @@ const Navbar = () => {
       </a>
 
       <div className="navbar-links">
+        <a className="navbar-link" href="#courses" onClick={() => fetchToken("admin")}>Admin</a>
+        <a className="navbar-link" href="#courses" onClick={() => fetchToken("writer")}>Writer</a>
         <a className="navbar-link" href="#home">Get started</a>
         <a className="navbar-link" href="#courses">Courses</a>
         <button className="navbar-btn" onClick={toggleTheme}>
