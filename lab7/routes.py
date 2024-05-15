@@ -71,6 +71,7 @@ def get_courses():
     courses_list = []
     for course in courses:
         courses_list.append({
+            "id": course.id,
             "title": course.title,
             "description": course.description,
             "level": course.level,

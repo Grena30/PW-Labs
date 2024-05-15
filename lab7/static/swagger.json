@@ -166,7 +166,7 @@
           {
             "name": "per_page",
             "in": "query",
-            "description": "Number of courses per page (default: 10)",
+            "description": "Number of courses per page (default: 4)",
             "required": false,
             "type": "integer"
           }
